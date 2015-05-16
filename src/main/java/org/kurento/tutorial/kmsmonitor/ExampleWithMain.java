@@ -20,12 +20,20 @@ public class ExampleWithMain {
 			System.out.println("Inbound.Delta.Nacks, "+ kmsStats.getWebRtcStats().getInbound().getDeltaNacks());
 			System.out.println("Inbound.Jitter, " + kmsStats.getWebRtcStats().getInbound().getJitter());
 			
-			Socket conn = new Socket(System.getProperty("graphite_ip", DEFAULT_GRAPHITE_IP), 2003);
-			DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
-			dos.writeBytes("server.app1tt.pipelines "+ kmsStats.getNumPipelines() +"\n");
-			conn.close();
-			
-			Thread.sleep(3000);
+			try {
+				Socket conn = new Socket(System.getProperty("graphite_ip", DEFAULT_GRAPHITE_IP), 2003);
+				DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+				System.out.println("sending to graphite: ");
+				dos.writeBytes("server.app1tt.pipelines " + kmsStats.getNumPipelines() +" "+ System.currentTimeMillis() / 1000L +"\n");
+				//dos.writeBytes("server.app1tt.pipelines 12 "+ System.currentTimeMillis() / 1000L +"\n");
+				dos.writeBytes("server.app1tt.elements " + kmsStats.getNumElements() +" "+ System.currentTimeMillis() / 1000L +"\n");
+				//dos.writeBytes("server.app1tt.elements 15 "+ System.currentTimeMillis() / 1000L +"\n");
+				conn.close();
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+
+			Thread.sleep(2000);
 		}	
 	}
 }
