@@ -1,6 +1,8 @@
 package org.kurento.tutorial.kmsmonitor;
 import java.io.DataOutputStream;
 import java.net.Socket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class SendStats {
 	
@@ -9,6 +11,13 @@ public class SendStats {
 
 	public static void main(String[] args) throws InterruptedException {
 		KmsMonitor kmsMonitor = new KmsMonitor(System.getProperty("kms.ws.uri", DEFAULT_KMS_WS_URI));
+		String graphite_ip = System.getProperty("graphite_ip", DEFAULT_GRAPHITE_IP);
+		String hostname = "";
+		try {
+			hostname = InetAddress.getLocalHost().getHostName();
+		} catch (UnknownHostException ex) {
+			System.out.println("Hostname can not be resolved");
+		}
 		
 		while(true){
 			KmsStats kmsStats = kmsMonitor.updateStats();
@@ -21,13 +30,13 @@ public class SendStats {
 			//System.out.println("Inbound.Jitter, " + kmsStats.getWebRtcStats().getInbound().getJitter());
 			
 			try {
-				Socket conn = new Socket(System.getProperty("graphite_ip", DEFAULT_GRAPHITE_IP), 2003);
+				Socket conn = new Socket(graphite_ip, 2003);
 				DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
-				System.out.println("Sending to graphite... ");
-				dos.writeBytes("server.app1tt.pipelines " + kmsStats.getNumPipelines() +" "+ System.currentTimeMillis() / 1000L +"\n");
-				//dos.writeBytes("server.app1tt.pipelines 12 "+ System.currentTimeMillis() / 1000L +"\n");
-				dos.writeBytes("server.app1tt.elements " + kmsStats.getNumElements() +" "+ System.currentTimeMillis() / 1000L +"\n");
-				//dos.writeBytes("server.app1tt.elements 15 "+ System.currentTimeMillis() / 1000L +"\n");
+				System.out.println("Sending stats for hostname: " + hostname + " to graphite... ");
+				dos.writeBytes("server."+hostname+".pipelines " + kmsStats.getNumPipelines() +" "+ System.currentTimeMillis() / 1000L +"\n");
+				//dos.writeBytes("server."+hostname+".pipelines 12 "+ System.currentTimeMillis() / 1000L +"\n");
+				dos.writeBytes("server."+hostname+".elements " + kmsStats.getNumElements() +" "+ System.currentTimeMillis() / 1000L +"\n");
+				//dos.writeBytes("server."+hostname+".elements 15 "+ System.currentTimeMillis() / 1000L +"\n");
 				conn.close();
 			} catch (Exception e) {
 				System.out.println(e);
