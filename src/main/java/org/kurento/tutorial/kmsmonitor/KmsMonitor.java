@@ -72,7 +72,10 @@ public class KmsMonitor {
 			clean();
 			throw new RuntimeException("Unexpected error while updating stats",
 					t);
+		} finally {
+			kurentoClient.destroy();
 		}
+
 		return stopIteration();
 	}
 
