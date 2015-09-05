@@ -52,7 +52,7 @@ start() {
 
   # If the application isn't running, starts it
   echo -n "Starting application: "
-  sleep 5
+  sleep 10
   # Redirects default and error output to a log file
   #java -jar /path/to/application.jar >> /path/to/logfile 2>&1 &
   cd /home/ubuntu/kms-monitoring-java
