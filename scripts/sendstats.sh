@@ -1,5 +1,5 @@
 echo -n "Starting application: "
-sleep 5
+sleep 30
 # Redirects default and error output to a log file
 EXTERNAL_IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
 applDir="/root/kms-monitoring-java"
