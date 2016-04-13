@@ -8,16 +8,12 @@ public class SendStats {
 	
 	final static String DEFAULT_KMS_WS_URI = "ws://localhost:8888/kurento";
 	final static String DEFAULT_GRAPHITE_IP = "80.96.122.69";	
+	final static String DEFAULT_HOST_NAME = "kms";	
 
 	public static void main(String[] args) throws InterruptedException {
 		KmsMonitor kmsMonitor = new KmsMonitor(System.getProperty("kms.ws.uri", DEFAULT_KMS_WS_URI));
 		String graphite_ip = System.getProperty("graphite_ip", DEFAULT_GRAPHITE_IP);
-		String hostname = System.getProperty("hostname");
-		try {
-			hostname = InetAddress.getLocalHost().getHostName();
-		} catch (UnknownHostException ex) {
-			System.out.println("Hostname can not be resolved");
-		}
+		String hostname = System.getProperty("HOST_NAME", DEFAULT_HOST_NAME);
 		
 		while(true){
 			KmsStats kmsStats = kmsMonitor.updateStats();
