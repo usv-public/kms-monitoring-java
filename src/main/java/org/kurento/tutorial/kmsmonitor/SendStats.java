@@ -12,7 +12,7 @@ public class SendStats {
 	public static void main(String[] args) throws InterruptedException {
 		KmsMonitor kmsMonitor = new KmsMonitor(System.getProperty("kms.ws.uri", DEFAULT_KMS_WS_URI));
 		String graphite_ip = System.getProperty("graphite_ip", DEFAULT_GRAPHITE_IP);
-		String hostname = "";
+		String hostname = System.getProperty("hostname");
 		try {
 			hostname = InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException ex) {
