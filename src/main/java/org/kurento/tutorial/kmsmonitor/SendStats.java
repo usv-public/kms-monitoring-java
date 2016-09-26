@@ -25,7 +25,9 @@ public class SendStats {
 				System.out.println("Sending stats for hostname: " + hostname + " to graphite... ");
 				dos.writeBytes("server."+hostname+".pipelines " + kmsStats.getNumPipelines() +" "+ System.currentTimeMillis() / 1000L +"\n");
 				dos.writeBytes("server."+hostname+".elements " + kmsStats.getNumElements() +" "+ System.currentTimeMillis() / 1000L +"\n");
-				
+				dos.writeBytes("server."+hostname+".inboundrtp "+ kmsStats.getWebRtcStats().getInbound() + " "+ System.currentTimeMillis() / 1000L +"\n");
+				dos.writeBytes("server."+hostname+".outboundrtp "+ kmsStats.getWebRtcStats().getOutbound() + " "+ System.currentTimeMillis() / 1000L +"\n");
+
 				conn.close();
 			} catch (Exception e) {
 				System.out.println(e);
