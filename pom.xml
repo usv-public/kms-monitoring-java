@@ -4,7 +4,7 @@
 
 	<groupId>org.kurento.tutorial</groupId>
 	<artifactId>kms-monitoring-java</artifactId>
-	<version>6.0.0-SNAPSHOT</version>
+	<version>6.5.0</version>
 
 	<packaging>jar</packaging>
 
@@ -25,7 +25,7 @@
 		<repository>
 			<id>kurento-snapshots</id>
 			<name>Kurento Snapshot Repository</name>
-			<url>http://maven.kurento.org/archiva/repository/snapshots/</url>
+			<url>http://maven.kurento.org/snapshots/</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -36,7 +36,7 @@
 		<repository>
 			<id>kurento-releases</id>
 			<name>Kurento Repository</name>
-			<url>http://maven.kurento.org/archiva/repository/internal/</url>
+			<url>http://maven.kurento.org/internal/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -52,7 +52,7 @@
 		<dependency>
 			<groupId>org.kurento</groupId>
 			<artifactId>kurento-client</artifactId>
-			<version>6.0.0-SNAPSHOT</version>
+			<version>6.5.0</version>
 		</dependency>
 	</dependencies>
 
