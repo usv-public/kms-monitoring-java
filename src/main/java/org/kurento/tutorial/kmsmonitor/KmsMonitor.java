@@ -3,14 +3,7 @@ package org.kurento.tutorial.kmsmonitor;
 import java.util.List;
 import java.util.Map;
 
-import org.kurento.client.KurentoClient;
-import org.kurento.client.MediaObject;
-import org.kurento.client.MediaPipeline;
-import org.kurento.client.RTCInboundRTPStreamStats;
-import org.kurento.client.RTCOutboundRTPStreamStats;
-import org.kurento.client.RTCStats;
-import org.kurento.client.ServerManager;
-import org.kurento.client.WebRtcEndpoint;
+import org.kurento.client.*;
 
 /**
  * This class makes possible to connect to a given KMS instance and recover
@@ -110,8 +103,8 @@ public class KmsMonitor {
 
 	private void crunchWebRtcEndpoint(WebRtcEndpoint webRtcEndpoint) {
 		try {
-			Map<String, RTCStats> stats = webRtcEndpoint.getStats();
-			for (RTCStats s : stats.values()) {
+			Map<String, Stats> stats = webRtcEndpoint.getStats();
+			for (Stats s : stats.values()) {
 				switch (s.getType()) {
 				case inboundrtp:
 					RTCInboundRTPStreamStats inboudStats = (RTCInboundRTPStreamStats) s;

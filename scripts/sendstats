@@ -5,7 +5,7 @@
 #
 
 # Set this to your Java installation
-JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64
+JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
 
 serviceNameLo="sendstats"                                       # service name with the first letter in lowercase
 serviceName="sendstats"                                         # service name
@@ -23,9 +23,18 @@ EXTERNAL_IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
 instance_name=$(curl http://169.254.169.254/latest/meta-data/hostname)
 instance_name=${instance_name::-10}
 
-javaArgs="-DHOST_NAME=$instance_name -Dkms.ws.uri=ws://$EXTERNAL_IP:8888/kurento -cp $applDir/httpcore-4.3.1.jar:$applDir/websocket-api-9.3.0.M1.jar:$applDir/jetty-io-9.3.0.M1.jar:$applDir/jetty-util-9.3.0.M1.jar:$applDir/websocket-common-9.3.0.M1.jar:$applDir/websocket-client-9.3.0.M1.jar:$applDir/gson-2.3.1.jar:$applDir/guava-18.0.jar:$applDir/slf4j-api-1.7.5.jar:$applDir/kurento-jsonrpc-client-6.0.0-SNAPSHOT.jar:$applDir/kurento-commons-6.0.0-SNAPSHOT.jar:$applDir/kurento-client-6.0.0-SNAPSHOT.jar:$applDir/target/kms-monitoring-java-6.0.0-SNAPSHOT.jar org.kurento.tutorial.kmsmonitor.SendStats"
+# Check whether we have the ENV var for monitoring IP available
+file="/opt/envvars"
+if [ -f "$file" ]
+then
+  source /opt/envvars
+  export $(cut -d= -f1 /opt/envvars)
+  javaArgs="-DHOST_NAME=$instance_name -Dgraphite_ip=$NUBOMEDIAMONITORINGIP -Dkms.ws.uri=ws://$EXTERNAL_IP:8888/kurento -cp $applDir/libraries/commons-codec-1.9.jar:$applDir/libraries/commons-logging-1.2.jar:$applDir/libraries/fluent-hc-4.5.1.jar:$applDir/libraries/gson-2.5.jar:$applDir/libraries/guava-19.0.jar:$applDir/libraries/httpclient-4.5.1.jar:$applDir/libraries/httpcore-4.4.3.jar:$applDir/libraries/javax.inject-1.jar:$applDir/libraries/jetty-io-9.3.0.M2.jar:$applDir/libraries/jetty-util-9.3.0.M2.jar:$applDir/libraries/kms-api-core-6.5.0.jar:$applDir/libraries/kms-api-elements-6.5.0.jar:$applDir/libraries/kms-api-filters-6.5.0.jar:$applDir/libraries/kurento-client-6.5.0.jar:$applDir/libraries/kurento-commons-6.5.0.jar:$applDir/libraries/kurento-jsonrpc-client-6.5.0.jar:$applDir/libraries/paranamer-2.7.jar:$applDir/libraries/slf4j-api-1.7.13.jar:$applDir/libraries/websocket-api-9.3.0.M2.jar:$applDir/libraries/websocket-client-9.3.0.M2.jar:$applDir/libraries/websocket-common-9.3.0.M2.jar:$applDir/target/kms-monitoring-java-6.5.0.jar org.kurento.tutorial.kmsmonitor.SendStats"
+else
+  javaArgs="-DHOST_NAME=$instance_name -Dkms.ws.uri=ws://$EXTERNAL_IP:8888/kurento -cp $applDir/libraries/commons-codec-1.9.jar:$applDir/libraries/commons-logging-1.2.jar:$applDir/libraries/fluent-hc-4.5.1.jar:$applDir/libraries/gson-2.5.jar:$applDir/libraries/guava-19.0.jar:$applDir/libraries/httpclient-4.5.1.jar:$applDir/libraries/httpcore-4.4.3.jar:$applDir/libraries/javax.inject-1.jar:$applDir/libraries/jetty-io-9.3.0.M2.jar:$applDir/libraries/jetty-util-9.3.0.M2.jar:$applDir/libraries/kms-api-core-6.5.0.jar:$applDir/libraries/kms-api-elements-6.5.0.jar:$applDir/libraries/kms-api-filters-6.5.0.jar:$applDir/libraries/kurento-client-6.5.0.jar:$applDir/libraries/kurento-commons-6.5.0.jar:$applDir/libraries/kurento-jsonrpc-client-6.5.0.jar:$applDir/libraries/paranamer-2.7.jar:$applDir/libraries/slf4j-api-1.7.13.jar:$applDir/libraries/websocket-api-9.3.0.M2.jar:$applDir/libraries/websocket-client-9.3.0.M2.jar:$applDir/libraries/websocket-common-9.3.0.M2.jar:$applDir/target/kms-monitoring-java-6.5.0.jar org.kurento.tutorial.kmsmonitor.SendStats"
+fi
 javaCommandLine="$javaExe $javaArgs"                          # command line to start the Java service application
-javaCommandLineKeyword="kms-monitoring-java-6.0.0-SNAPSHOT.jar"       # a keyword that occurs on the commandline, used to detect an already running service process and to distinguish it from others
+javaCommandLineKeyword="kms-monitoring-java-6.5.0.jar"       # a keyword that occurs on the commandline, used to detect an already running service process and to distinguish it from others
  
 # Makes the file $1 writable by the group $serviceGroup.
 function makeFileWritable {
